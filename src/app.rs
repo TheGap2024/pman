@@ -4,8 +4,8 @@ use ratatui::layout::{Constraint, Direction, Layout};
 
 use crate::actions::{Action, ConfirmCallback, InputCallback};
 use crate::components::{
-    CommandPalette, Component, ConfirmDialog, FilePicker, HelpBar, InputDialog, SessionPicker,
-    WorktreePicker,
+    BufferPicker, CommandPalette, Component, ConfirmDialog, FilePicker, HelpBar, InputDialog,
+    SessionPicker, WorktreePicker,
 };
 use crate::error::Result;
 use crate::integrations::{GitClient, NvimIntegration, TmuxClient};
@@ -17,6 +17,7 @@ pub enum View {
     CommandPalette,
     FilePicker,
     WorktreePicker,
+    BufferPicker,
 }
 
 pub enum Dialog {
@@ -38,6 +39,7 @@ pub struct App {
     command_palette: Option<CommandPalette>,
     file_picker: Option<FilePicker>,
     worktree_picker: Option<WorktreePicker>,
+    buffer_picker: Option<BufferPicker>,
 
     // Integrations
     tmux: TmuxClient,
@@ -57,6 +59,11 @@ impl App {
             _ => None,
         };
 
+        let worktree_picker = match &initial_view {
+            View::WorktreePicker => Some(WorktreePicker::new(&current_path)),
+            _ => None,
+        };
+
         Ok(Self {
             tui: Tui::new()?,
             event_handler: EventHandler::new(100),
@@ -67,10 +74,12 @@ impl App {
             session_picker,
             command_palette,
             file_picker: None,
-            worktree_picker: None,
+            worktree_picker,
+            buffer_picker: None,
             tmux,
         })
     }
+
 
     pub fn run(&mut self) -> Result<()> {
         self.tui.enter()?;
@@ -126,6 +135,11 @@ impl App {
                         picker.render(frame, chunks[0]);
                     }
                 }
+                View::BufferPicker => {
+                    if let Some(ref mut picker) = self.buffer_picker {
+                        picker.render(frame, chunks[0]);
+                    }
+                }
             }
 
             // Render help bar
@@ -167,14 +181,23 @@ impl App {
                     .as_ref()
                     .map(|p| p.help_text())
                     .unwrap_or(""),
+                View::BufferPicker => self
+                    .buffer_picker
+                    .as_ref()
+                    .map(|p| p.help_text())
+                    .unwrap_or(""),
             },
         }
     }
 
     fn handle_action(&mut self, action: Action) -> Result<()> {
-        // Handle dialog first if active
+        // Handle dialog if active
         if let Dialog::Input(ref mut dialog) = self.dialog {
             if let Some(result_action) = dialog.handle_action(&action)? {
+                // Close dialog for all actions except Render
+                if !matches!(result_action, Action::Render) {
+                    self.dialog = Dialog::None;
+                }
                 return self.handle_action(result_action);
             }
             return Ok(());
@@ -182,6 +205,10 @@ impl App {
 
         if let Dialog::Confirm(ref mut dialog) = self.dialog {
             if let Some(result_action) = dialog.handle_action(&action)? {
+                // Close dialog for all actions except Render
+                if !matches!(result_action, Action::Render) {
+                    self.dialog = Dialog::None;
+                }
                 return self.handle_action(result_action);
             }
             return Ok(());
@@ -232,6 +259,13 @@ impl App {
                 self.tui.exit()?;
                 let nvim = NvimIntegration::new(TmuxClient::new());
                 nvim.open_file(&path)?;
+                self.running = false;
+                return Ok(());
+            }
+            Action::OpenBuffer { socket, bufnr } => {
+                self.tui.exit()?;
+                let nvim = NvimIntegration::new(TmuxClient::new());
+                nvim.open_buffer(&socket, bufnr)?;
                 self.running = false;
                 return Ok(());
             }
@@ -319,6 +353,11 @@ impl App {
                 }
                 return Ok(());
             }
+            Action::ShowBufferPicker => {
+                self.view = View::BufferPicker;
+                self.buffer_picker = Some(BufferPicker::new());
+                return Ok(());
+            }
             Action::ShowGitDiff => {
                 self.tui.exit()?;
                 self.tmux
@@ -351,6 +390,11 @@ impl App {
                 .as_mut()
                 .and_then(|p| p.handle_action(&action).ok())
                 .flatten(),
+            View::BufferPicker => self
+                .buffer_picker
+                .as_mut()
+                .and_then(|p| p.handle_action(&action).ok())
+                .flatten(),
         };
 
         if let Some(result_action) = result_action {
@@ -362,11 +406,10 @@ impl App {
 
     fn execute_command(&mut self, cmd: PaletteCommand) -> Result<()> {
         match cmd {
-            PaletteCommand::OpenFile => {
-                self.view = View::FilePicker;
-                if self.file_picker.is_none() {
-                    self.file_picker = Some(FilePicker::new(&self.current_path));
-                }
+            // Sessions
+            PaletteCommand::ListSessions => {
+                self.view = View::SessionPicker;
+                self.session_picker.refresh()?;
             }
             PaletteCommand::NewSession => {
                 self.dialog = Dialog::Input(InputDialog::new(
@@ -382,6 +425,7 @@ impl App {
                     ConfirmCallback::KillSession(current),
                 ));
             }
+            // Worktrees
             PaletteCommand::ListWorktrees => {
                 self.view = View::WorktreePicker;
                 if self.worktree_picker.is_none() {
@@ -394,7 +438,20 @@ impl App {
                     InputCallback::CreateWorktree,
                 ));
             }
-            PaletteCommand::GitStatus => {
+            // Files
+            PaletteCommand::FindFiles => {
+                self.tui.exit()?;
+                let cmd = r#"file=$(fd --type f --hidden --exclude .git | fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}') && [ -n "$file" ] && nvim "$file""#;
+                self.tmux.popup_command(cmd, "90%", "90%")?;
+                self.running = false;
+                return Ok(());
+            }
+            PaletteCommand::ListBuffers => {
+                self.view = View::BufferPicker;
+                self.buffer_picker = Some(BufferPicker::new());
+            }
+            // Git
+            PaletteCommand::GitDiff => {
                 return self.handle_action(Action::ShowGitDiff);
             }
         }

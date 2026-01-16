@@ -43,10 +43,12 @@ pub fn key_to_action(key: KeyEvent) -> Option<Action> {
         KeyCode::Char('q') => Some(Action::Quit),
         KeyCode::Esc => Some(Action::Escape),
         KeyCode::Enter => Some(Action::Enter),
-        KeyCode::Up | KeyCode::Char('k') if key.modifiers.contains(KeyModifiers::CONTROL) => {
+        KeyCode::Up => Some(Action::MoveUp),
+        KeyCode::Down => Some(Action::MoveDown),
+        KeyCode::Char('k') if key.modifiers.contains(KeyModifiers::CONTROL) => {
             Some(Action::MoveUp)
         }
-        KeyCode::Down | KeyCode::Char('j') if key.modifiers.contains(KeyModifiers::CONTROL) => {
+        KeyCode::Char('j') if key.modifiers.contains(KeyModifiers::CONTROL) => {
             Some(Action::MoveDown)
         }
         KeyCode::PageUp => Some(Action::PageUp),

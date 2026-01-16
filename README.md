@@ -92,8 +92,11 @@ Work in parallel with your AI agents:
 
 | Key | Action |
 |-----|--------|
-| `Prefix + s` | Session Picker |
+| `Prefix + s` | Sessions |
 | `Prefix + p` | Command Palette |
+| `Prefix + w` | Worktrees |
+| `Prefix + f` | Find Files (fzf) |
+| `Prefix + d` | Git Diff |
 
 ### Session Picker
 
@@ -116,6 +119,19 @@ Work in parallel with your AI agents:
 | `m` | Merge to main |
 | `Esc` | Close |
 
+### Command Palette
+
+| Command | Description |
+|---------|-------------|
+| List Sessions | Switch between tmux sessions |
+| New Session | Create a new tmux session |
+| Kill Session | Kill the current session |
+| List Worktrees | Manage git worktrees |
+| Create Worktree | Create a new git worktree |
+| Find Files | Find and open files with fzf |
+| List Buffers | Show open buffers in nvim |
+| Git Diff | Show git diff in popup |
+
 ### Navigation (All Views)
 
 | Key | Action |
@@ -126,7 +142,7 @@ Work in parallel with your AI agents:
 ## Prerequisites
 
 ```bash
-brew install tmux neovim git-delta
+brew install tmux neovim fd fzf bat git-delta
 ```
 
 ## Uninstall

@@ -1,7 +1,9 @@
+mod buffer;
+mod command;
 mod session;
 mod worktree;
-mod command;
 
+pub use buffer::NvimBuffer;
+pub use command::PaletteCommand;
 pub use session::TmuxSession;
 pub use worktree::GitWorktree;
-pub use command::PaletteCommand;

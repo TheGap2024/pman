@@ -30,6 +30,12 @@ enum Commands {
     SessionPicker,
     /// Open command palette
     CommandPalette,
+    /// Open worktree picker
+    Worktrees,
+    /// Find files with fzf
+    FindFiles,
+    /// Show git diff
+    GitDiff,
     /// Install tmux keybindings
     Install,
     /// Uninstall tmux keybindings
@@ -54,6 +60,18 @@ fn main() -> Result<()> {
             let mut app = App::new(View::CommandPalette)?;
             app.run()
         }
+        Some(Commands::Worktrees) => {
+            check_prerequisites()?;
+            install_panic_hook();
+            let mut app = App::new(View::WorktreePicker)?;
+            app.run()
+        }
+        Some(Commands::FindFiles) => {
+            run_find_files()
+        }
+        Some(Commands::GitDiff) => {
+            run_git_diff()
+        }
     }
 }
 
@@ -61,6 +79,9 @@ fn check_prerequisites() -> Result<()> {
     let prerequisites = [
         ("tmux", "tmux is required. Install with: brew install tmux"),
         ("nvim", "nvim is required. Install with: brew install neovim"),
+        ("fd", "fd is required for file finding. Install with: brew install fd"),
+        ("fzf", "fzf is required for fuzzy finding. Install with: brew install fzf"),
+        ("bat", "bat is required for file preview. Install with: brew install bat"),
         ("delta", "delta is required for git diffs. Install with: brew install git-delta"),
     ];
 
@@ -94,6 +115,9 @@ fn install_keybindings() -> Result<()> {
 # pman keybindings (managed by pman)
 bind s display-popup -E -w 80% -h 80% "{pman_path} session-picker"
 bind p display-popup -E -w 80% -h 80% "{pman_path} command-palette"
+bind w display-popup -E -w 80% -h 80% "{pman_path} worktrees"
+bind f display-popup -E -w 90% -h 90% "{pman_path} find-files"
+bind d display-popup -E -w 90% -h 90% "{pman_path} git-diff"
 # end pman keybindings
 "#
     );
@@ -118,8 +142,11 @@ bind p display-popup -E -w 80% -h 80% "{pman_path} command-palette"
     println!("  tmux source-file ~/.tmux.conf");
     println!();
     println!("Keybindings:");
-    println!("  Prefix + s  →  Session Picker");
+    println!("  Prefix + s  →  Sessions");
     println!("  Prefix + p  →  Command Palette");
+    println!("  Prefix + w  →  Worktrees");
+    println!("  Prefix + f  →  Find Files");
+    println!("  Prefix + d  →  Git Diff");
 
     Ok(())
 }
@@ -156,5 +183,35 @@ fn uninstall_keybindings() -> Result<()> {
     println!("Reload tmux config with:");
     println!("  tmux source-file ~/.tmux.conf");
 
+    Ok(())
+}
+
+fn run_find_files() -> Result<()> {
+    use std::process::Command;
+
+    let status = Command::new("sh")
+        .arg("-c")
+        .arg(r#"file=$(fd --type f --hidden --exclude .git | fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}') && [ -n "$file" ] && nvim "$file""#)
+        .status()
+        .map_err(|e| PmanError::Io(e))?;
+
+    if !status.success() {
+        // User cancelled fzf, not an error
+    }
+    Ok(())
+}
+
+fn run_git_diff() -> Result<()> {
+    use std::process::Command;
+
+    let status = Command::new("sh")
+        .arg("-c")
+        .arg("git diff HEAD | delta")
+        .status()
+        .map_err(|e| PmanError::Io(e))?;
+
+    if !status.success() {
+        eprintln!("git diff failed");
+    }
     Ok(())
 }

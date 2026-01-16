@@ -25,6 +25,7 @@ pub enum Action {
 
     // File actions
     OpenFile(PathBuf),
+    OpenBuffer { socket: PathBuf, bufnr: i64 },
 
     // Worktree actions
     SwitchWorktree(PathBuf),
@@ -45,6 +46,7 @@ pub enum Action {
     ShowCommandPalette,
     ShowFilePicker,
     ShowWorktreePicker,
+    ShowBufferPicker,
 
     // Git
     ShowGitDiff,

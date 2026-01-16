@@ -11,6 +11,9 @@ pub enum PmanError {
     #[error("Git error: {0}")]
     Git(String),
 
+    #[error("Nvim error: {0}")]
+    Nvim(String),
+
     #[error("IO error: {0}")]
     Io(#[from] std::io::Error),
 
