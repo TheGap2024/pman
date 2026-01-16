@@ -1,51 +1,104 @@
 # pman
 
-**Switch tmux sessions and git worktrees in 2 keystrokes.**
+**Run 10 AI coding agents in parallel. Switch between them in 2 keystrokes.**
 
-Tired of typing long session names? Losing track of git worktrees across projects? pman is a fast TUI that lets you fuzzy-search and jump between your dev environments instantly.
+Claude Code, Codex, Cursor, Aider... AI agents are powerful, but slow. Why wait for one when you can run ten? pman turns tmux into a multi-agent cockpit—spawn agents in separate sessions, give each its own git worktree, and jump between them instantly with fuzzy search.
 
-## Features
+```
+Session 1: Claude implementing auth      [████████░░] 80%
+Session 2: Codex writing tests           [██████░░░░] 60%
+Session 3: Claude refactoring API        [████░░░░░░] 40%
+Session 4: Aider fixing bugs             [██░░░░░░░░] 20%
 
-- **Session Picker** (`Prefix + s`) - Fuzzy search all tmux sessions
-- **Command Palette** (`Prefix + p`) - Quick access to common actions
-- **Git Worktree Management** - Create, switch, merge, and delete worktrees
+> Press Prefix+s to switch... _
+```
+
+## Why pman?
+
+- **Parallel Execution** - Run multiple AI agents simultaneously, each in its own tmux session
+- **Isolated Workspaces** - Each agent gets its own git worktree, no merge conflicts
+- **Instant Context Switch** - Fuzzy search across all sessions, switch in milliseconds
+- **Zero Overhead** - Lightweight TUI, no electron, no bloat
 
 ## Installation
 
-### Homebrew (macOS)
-
 ```bash
 brew install golbin/tap/pman
-```
-
-### From Source
-
-```bash
-cargo install --path .
-```
-
-### Prerequisites
-
-```bash
-brew install tmux neovim git-delta
 ```
 
 ## Quick Start
 
 ```bash
 # 1. Install tmux keybindings
-pman install
+pman install && tmux source-file ~/.tmux.conf
 
-# 2. Reload tmux config
-tmux source-file ~/.tmux.conf
+# 2. Inside tmux, press Prefix+s (usually Ctrl+b, then s)
+#    to open session picker and start switching!
+```
 
-# 3. Inside tmux, press Prefix + s to open session picker
-#    (Prefix is usually Ctrl+b)
+## Usage Scenarios
+
+### Scenario 1: Parallel Feature Development
+
+You have 3 features to implement. Instead of doing them sequentially:
+
+```bash
+# Create worktrees for each feature
+# (Use Prefix+p → Create Worktree)
+feature/auth
+feature/payment
+feature/notifications
+
+# Spawn Claude Code in each worktree
+tmux new-session -s auth -c ~/project-auth
+tmux new-session -s payment -c ~/project-payment
+tmux new-session -s notifications -c ~/project-notifications
+
+# Now run your AI agent in each session
+# Switch between them with Prefix+s to monitor progress
+```
+
+### Scenario 2: Agent A/B Testing
+
+Compare how different agents solve the same problem:
+
+```bash
+# Session: claude-refactor    → Claude Code refactoring your API
+# Session: codex-refactor     → Codex doing the same task
+# Session: aider-refactor     → Aider's approach
+
+# Use Prefix+s to rapidly compare outputs
+# Pick the best solution, discard the rest
+```
+
+### Scenario 3: Review While Agents Work
+
+```bash
+# Session: agent-working      → AI implementing feature
+# Session: review             → You reviewing previous AI output
+# Session: manual-fixes       → You fixing edge cases AI missed
+
+# Agents don't block you. You don't block agents.
+# True parallel workflow.
+```
+
+### Scenario 4: Large Codebase Refactoring
+
+Split a massive refactoring task across multiple agents:
+
+```bash
+# Session: refactor-models    → Agent refactoring data models
+# Session: refactor-api       → Agent updating API endpoints
+# Session: refactor-tests     → Agent fixing broken tests
+# Session: refactor-docs      → Agent updating documentation
+
+# Each agent works on a separate worktree
+# Merge when all complete
 ```
 
 ## Keybindings
 
-### Tmux Keybindings (after `pman install`)
+### Tmux (after `pman install`)
 
 | Key | Action |
 |-----|--------|
@@ -60,15 +113,9 @@ tmux source-file ~/.tmux.conf
 | `Enter` | Switch to session |
 | `n` | New session |
 | `d` | Delete session |
-| `Esc` | Close (or clear query) |
+| `Esc` | Close |
 
 ### Command Palette
-
-| Key | Action |
-|-----|--------|
-| Type | Fuzzy search |
-| `Enter` | Execute command |
-| `Esc` | Close |
 
 Available commands:
 - **Open File** - Open file in nvim
@@ -82,20 +129,24 @@ Available commands:
 
 | Key | Action |
 |-----|--------|
-| Type | Fuzzy search |
 | `Enter` | Switch to worktree |
 | `n` | New worktree |
 | `d` | Delete worktree |
 | `m` | Merge to main |
-| `Esc` | Close |
 
-## Navigation (All Views)
+### Navigation (All Views)
 
 | Key | Action |
 |-----|--------|
 | `Ctrl+k` / `Up` | Move up |
 | `Ctrl+j` / `Down` | Move down |
 | `PageUp` / `PageDown` | Page navigation |
+
+## Prerequisites
+
+```bash
+brew install tmux neovim git-delta
+```
 
 ## Uninstall
 
