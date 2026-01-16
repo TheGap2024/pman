@@ -56,11 +56,11 @@ impl GitClient {
         let mut current_worktree: Option<GitWorktree> = None;
 
         for line in stdout.lines() {
-            if line.starts_with("worktree ") {
+            if let Some(path_str) = line.strip_prefix("worktree ") {
                 if let Some(wt) = current_worktree.take() {
                     worktrees.push(wt);
                 }
-                let path = PathBuf::from(line.strip_prefix("worktree ").unwrap());
+                let path = PathBuf::from(path_str);
                 current_worktree = Some(GitWorktree {
                     path,
                     branch: String::new(),
@@ -68,15 +68,15 @@ impl GitClient {
                     commit_hash: String::new(),
                     has_changes: false,
                 });
-            } else if line.starts_with("HEAD ") {
+            } else if let Some(hash) = line.strip_prefix("HEAD ") {
                 if let Some(ref mut wt) = current_worktree {
-                    wt.commit_hash = line.strip_prefix("HEAD ").unwrap().to_string();
+                    wt.commit_hash = hash.to_string();
                 }
-            } else if line.starts_with("branch ") {
+            } else if let Some(branch_ref) = line.strip_prefix("branch ") {
                 if let Some(ref mut wt) = current_worktree {
-                    let branch = line
-                        .strip_prefix("branch refs/heads/")
-                        .unwrap_or(line.strip_prefix("branch ").unwrap());
+                    let branch = branch_ref
+                        .strip_prefix("refs/heads/")
+                        .unwrap_or(branch_ref);
                     wt.branch = branch.to_string();
                     wt.is_main = branch == main_branch;
                 }
@@ -146,13 +146,17 @@ impl GitClient {
     pub fn create_worktree(&self, branch_name: &str) -> Result<PathBuf> {
         let worktree_path = self.repo_root.parent().unwrap_or(&self.repo_root).join(branch_name);
 
+        let path_str = worktree_path
+            .to_str()
+            .ok_or_else(|| PmanError::Git("Invalid path encoding".to_string()))?;
+
         let output = Command::new("git")
             .args([
                 "worktree",
                 "add",
                 "-b",
                 branch_name,
-                worktree_path.to_str().unwrap(),
+                path_str,
             ])
             .current_dir(&self.repo_root)
             .output()
@@ -171,8 +175,12 @@ impl GitClient {
             return Err(PmanError::UncommittedChanges);
         }
 
+        let path_str = path
+            .to_str()
+            .ok_or_else(|| PmanError::Git("Invalid path encoding".to_string()))?;
+
         let output = Command::new("git")
-            .args(["worktree", "remove", path.to_str().unwrap()])
+            .args(["worktree", "remove", path_str])
             .current_dir(&self.repo_root)
             .output()
             .map_err(|e| PmanError::Git(e.to_string()))?;
@@ -228,15 +236,5 @@ impl GitClient {
         }
 
         Ok(())
-    }
-
-    pub fn get_diff(&self, path: &Path) -> Result<String> {
-        let output = Command::new("git")
-            .args(["diff", "HEAD"])
-            .current_dir(path)
-            .output()
-            .map_err(|e| PmanError::Git(e.to_string()))?;
-
-        Ok(String::from_utf8_lossy(&output.stdout).to_string())
     }
 }

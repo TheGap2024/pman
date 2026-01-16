@@ -50,7 +50,6 @@ pub fn key_to_action(key: KeyEvent) -> Option<Action> {
         KeyCode::PageUp => Some(Action::PageUp),
         KeyCode::PageDown => Some(Action::PageDown),
         KeyCode::Backspace => Some(Action::Backspace),
-        KeyCode::Delete => Some(Action::Delete),
         KeyCode::Char(c) => Some(Action::Character(c)),
         _ => None,
     }

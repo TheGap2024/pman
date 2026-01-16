@@ -14,22 +14,16 @@ ratatui = "0.29"
 crossterm = "0.28"
 
 # Fuzzy search
-nucleo = "0.5"
 nucleo-matcher = "0.3"
-
-# Tmux integration
-tmux_interface = "0.3"
 
 # CLI
 clap = { version = "4", features = ["derive"] }
 
 # Error handling
 thiserror = "2"
-anyhow = "1"
 
 # Utility
 which = "7"
-unicode-width = "0.2"
 
 [profile.release]
 lto = true

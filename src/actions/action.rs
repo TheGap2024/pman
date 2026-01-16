@@ -17,7 +17,6 @@ pub enum Action {
     Backspace,
     Enter,
     Escape,
-    Delete,
 
     // Session actions
     SwitchSession(String),
@@ -55,7 +54,6 @@ pub enum Action {
 pub enum InputCallback {
     CreateSession,
     CreateWorktree,
-    RenameSession,
 }
 
 #[derive(Debug, Clone)]

@@ -20,14 +20,6 @@ impl PaletteCommand {
         ]
     }
 
-    pub fn git_commands() -> Vec<Self> {
-        vec![
-            Self::ListWorktrees,
-            Self::CreateWorktree,
-            Self::GitStatus,
-        ]
-    }
-
     pub fn non_git_commands() -> Vec<Self> {
         vec![
             Self::OpenFile,

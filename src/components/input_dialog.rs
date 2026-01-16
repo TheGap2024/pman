@@ -45,10 +45,6 @@ impl InputDialog {
                     InputCallback::CreateWorktree => {
                         Action::CreateWorktree(self.input.clone())
                     }
-                    InputCallback::RenameSession => {
-                        // Could be implemented later
-                        Action::CloseDialog
-                    }
                 };
                 Ok(Some(result))
             }
