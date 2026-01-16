@@ -1,0 +1,36 @@
+[package]
+name = "pman"
+version = "0.1.0"
+edition = "2021"
+description = "Tmux Session/Worktree Manager TUI"
+authors = ["Jin"]
+license = "MIT"
+repository = "https://github.com/golbin/pman"
+homepage = "https://github.com/golbin/pman"
+
+[dependencies]
+# TUI
+ratatui = "0.29"
+crossterm = "0.28"
+
+# Fuzzy search
+nucleo = "0.5"
+nucleo-matcher = "0.3"
+
+# Tmux integration
+tmux_interface = "0.3"
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# Error handling
+thiserror = "2"
+anyhow = "1"
+
+# Utility
+which = "7"
+unicode-width = "0.2"
+
+[profile.release]
+lto = true
+strip = true

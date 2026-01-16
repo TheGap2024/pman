@@ -1,0 +1,66 @@
+use std::path::PathBuf;
+use crate::models::PaletteCommand;
+
+#[derive(Debug, Clone)]
+pub enum Action {
+    Quit,
+    Render,
+
+    // Navigation
+    MoveUp,
+    MoveDown,
+    PageUp,
+    PageDown,
+
+    // Input
+    Character(char),
+    Backspace,
+    Enter,
+    Escape,
+    Delete,
+
+    // Session actions
+    SwitchSession(String),
+    CreateSession(String, Option<PathBuf>),
+    KillSession(String),
+
+    // File actions
+    OpenFile(PathBuf),
+
+    // Worktree actions
+    SwitchWorktree(PathBuf),
+    CreateWorktree(String),
+    DeleteWorktree(PathBuf),
+    MergeWorktree(PathBuf),
+
+    // Command palette
+    ExecuteCommand(PaletteCommand),
+
+    // Dialog actions
+    ShowInput { title: String, callback: InputCallback },
+    ShowConfirm { title: String, message: String, callback: ConfirmCallback },
+    CloseDialog,
+
+    // View switching
+    ShowSessionPicker,
+    ShowCommandPalette,
+    ShowFilePicker,
+    ShowWorktreePicker,
+
+    // Git
+    ShowGitDiff,
+}
+
+#[derive(Debug, Clone)]
+pub enum InputCallback {
+    CreateSession,
+    CreateWorktree,
+    RenameSession,
+}
+
+#[derive(Debug, Clone)]
+pub enum ConfirmCallback {
+    DeleteWorktree(PathBuf),
+    MergeWorktree(PathBuf),
+    KillSession(String),
+}
